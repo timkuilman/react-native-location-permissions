@@ -1,0 +1,27 @@
+{
+  "name": "react-native-location-permissions",
+  "version": "0.0.1",
+  "description": "A simple and easy to use location permissions library for React Native.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "scripts": {
+    "release": "standard-version"
+  },
+  "keywords": [
+    "react-native",
+    "react-component",
+    "ios",
+    "location"
+  ],
+  "author": "Simon Mitchell",
+  "license": "MIT",
+  "peerDependencies": {
+    "react-native": "^0.40.0"
+  },
+  "devDependencies": {
+    "standard-version": "^4.0.0"
+  }
+}
