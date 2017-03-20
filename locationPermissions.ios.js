@@ -5,10 +5,14 @@ const LocationPermissionsEventEmitter = new NativeEventEmitter(RNLocationPermiss
 
 export default {
 	onPermissionsChange: (callback) => {
+
 		const subscription = LocationPermissionsEventEmitter.addListener(RNLocationPermissions.locationPermissionsDidChange, callback);
+		RNLocationPermissions.startListening();
 
 		return function off() {
 			subscription.remove();
+			RNLocationPermissions.stopListening();
 		};
 	},
+	...RNLocationPermissions
 }

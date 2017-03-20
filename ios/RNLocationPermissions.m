@@ -18,13 +18,11 @@ RCT_ENUM_CONVERTER(CLAuthorizationStatus, (@{ @"notDetermined" : @(kCLAuthorizat
 
 @implementation RNLocationPermissions
 
-@synthesize locationManager;
-
 
 RCT_EXPORT_MODULE()
 
 - (void) dealloc {
-    locationManager.delegate = nil;
+    self.locationManager.delegate = nil;
 }
 
 - (dispatch_queue_t)methodQueue
@@ -53,27 +51,31 @@ RCT_EXPORT_MODULE()
     self = [super init];
 
     if (self) {
-        locationManager = [[CLLocationManager alloc] init];
-        locationManager.delegate = self;
+        
     }
 
     return self;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    
-    __block NSString *statusString = @"notDetermined";
-    [[self constantsToExport] enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        
-        if ([obj intValue] == status) {
-            statusString = key;
-            *stop = true;
-        }
-    }];
-    
-    RCTLogInfo(@"Auth is %d", statusString);
-    
-    [self sendEventWithName:RNLocationPermissionsDidChangeEvent body:@{@"status":statusString}];
+    [self sendEventWithName:RNLocationPermissionsDidChangeEvent body:@{@"status":@(status)}];
 }
+
+RCT_EXPORT_METHOD(startListening) {
+    
+    if (!self.locationManager) {
+        self.locationManager = [CLLocationManager new];
+        self.locationManager.delegate = self;
+    }
+}
+
+RCT_EXPORT_METHOD(stopListening) {
+    
+    if (self.locationManager) {
+        self.locationManager.delegate = nil;
+        self.locationManager = nil;
+    }
+}
+
 
 @end
