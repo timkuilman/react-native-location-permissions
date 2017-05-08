@@ -68,7 +68,7 @@ RCT_EXPORT_MODULE()
     
     [self.completionBlocks enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (obj[@"resolve"]) {
-            ((RCTPromiseResolveBlock)obj[@"resolve"])(status);
+            ((RCTPromiseResolveBlock)obj[@"resolve"])(@(status));
         }
     }];
     
