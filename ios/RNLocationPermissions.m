@@ -16,6 +16,12 @@ RCT_ENUM_CONVERTER(CLAuthorizationStatus, (@{ @"notDetermined" : @(kCLAuthorizat
                    kCLAuthorizationStatusNotDetermined, intValue)
 @end
 
+@interface RNLocationPermissions ()
+
+@property (nonatomic, strong) NSMutableArray <NSDictionary *> *completionBlocks;
+
+@end
+
 @implementation RNLocationPermissions
 
 
@@ -51,7 +57,7 @@ RCT_EXPORT_MODULE()
     self = [super init];
 
     if (self) {
-        
+        self.completionBlocks = [NSMutableArray new];
     }
 
     return self;
@@ -59,12 +65,22 @@ RCT_EXPORT_MODULE()
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     [self sendEventWithName:RNLocationPermissionsDidChangeEvent body:@{@"status":@(status)}];
+    
+    [self.completionBlocks enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj[@"resolve"]) {
+            ((RCTPromiseResolveBlock)obj[@"resolve"])(status);
+        }
+    }];
+    
+    self.completionBlocks = nil;
 }
 
 RCT_EXPORT_METHOD(startListening) {
     
     if (!self.locationManager) {
         self.locationManager = [CLLocationManager new];
+        self.locationManager.delegate = self;
+    } else {
         self.locationManager.delegate = self;
     }
 }
@@ -77,5 +93,32 @@ RCT_EXPORT_METHOD(stopListening) {
     }
 }
 
+RCT_EXPORT_METHOD(requestWhenInUsePermissions:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    if (!self.locationManager) {
+        self.locationManager = [CLLocationManager new];
+    }
+    
+    [self.completionBlocks addObject:@{
+        @"resolve": resolve,
+        @"reject": reject
+    }];
+    
+    [self.locationManager requestWhenInUseAuthorization];
+}
+
+RCT_EXPORT_METHOD(requestAlwaysPermissions:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    if (!self.locationManager) {
+        self.locationManager = [CLLocationManager new];
+    }
+    
+    [self.completionBlocks addObject:@{
+        @"resolve": resolve,
+        @"reject": reject
+    }];
+    
+    [self.locationManager requestAlwaysAuthorization];
+}
 
 @end
