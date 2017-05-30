@@ -19,7 +19,7 @@
   "author": "Simon Mitchell",
   "license": "MIT",
   "peerDependencies": {
-    "react-native": "^0.40.0"
+    "react-native": "*"
   },
   "devDependencies": {
     "standard-version": "^4.0.0"
