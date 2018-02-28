@@ -41,6 +41,10 @@ RCT_EXPORT_MODULE()
     return @[RNLocationPermissionsDidChangeEvent];
 }
 
++ (BOOL)requiresMainQueueSetup {
+    return true;
+}
+
 - (NSDictionary *)constantsToExport
 {
     return @{
