@@ -76,7 +76,7 @@ RCT_EXPORT_MODULE()
         }
     }];
     
-    self.completionBlocks = nil;
+    self.completionBlocks = [NSMutableArray new];
 }
 
 RCT_EXPORT_METHOD(startListening) {
