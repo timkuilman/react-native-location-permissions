@@ -11,12 +11,12 @@ or
 
 `npm install react-native-location-permissions --save`
 
-### react-native 0.60 and higher
+#### react-native 0.60 and higher
 Cocoapods will take care of all the magic! You're done! 
 
-### react-native 0.59 and lower
+#### react-native 0.59 and lower
 
-`react-native link react-native-location-permissions
+react-native link react-native-location-permissions
 
 ## Usage
 
